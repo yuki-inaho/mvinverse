@@ -7,16 +7,35 @@ name = "mvinverse"
 version = "0.1.0"
 description = "MVInverse: Multi-view inverse rendering"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 dependencies = [
     "torch",
     "torchvision",
     "numpy",
     "Pillow",
     "opencv-python",
+    "huggingface_hub",
+    "safetensors>=0.8.0",
 ]
 
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["mvinverse*"]
 exclude = ["ckpts*", "assets*", "outputs*"]
+
+# --- uv configuration (added for Blackwell / cu128) ---
+# inference.py is run from the repo root (the mvinverse package is importable
+# from cwd, matching the README), so uv only needs to install dependencies.
+[tool.uv]
+package = false
+
+# Pull torch/torchvision from the CUDA 12.8 index for Blackwell (sm_120) support.
+# The README's torch==2.5.1+cu118 pin does NOT support sm_120.
+[tool.uv.sources]
+torch = [{ index = "pytorch-cu128" }]
+torchvision = [{ index = "pytorch-cu128" }]
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
