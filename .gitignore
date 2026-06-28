@@ -11,6 +11,8 @@
 
 .vscode
 .venv/
+.playwright-cli/
+examples_mp4/
 ckpts
 
 /checkpoints
